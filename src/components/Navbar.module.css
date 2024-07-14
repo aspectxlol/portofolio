@@ -1,0 +1,7 @@
+.nav-links {
+  @apply transition-all hover:bg-blue-300 hover:bg-opacity-20 rounded-xl p-2 px-4;
+}
+
+.nav-icon {
+  @apply w-16 h-16 
+}

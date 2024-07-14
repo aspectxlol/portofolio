@@ -4,6 +4,9 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+export type DropdownMenuItemProps = Pick<DropdownMenuPrimitive.DropdownMenuProps, "open"> &
+  Pick<DropdownMenuPrimitive.DropdownMenuItemProps, "onSelect">;
+
 const DropdownMenu = DropdownMenuPrimitive.Root
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
