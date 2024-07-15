@@ -21,14 +21,9 @@ export default function Navbar() {
         {session.data && <DropdownMenu>
           <DropdownMenuTrigger><span className="p-2 px-4 rounded-lg hover:bg-blue-300 hover:bg-opacity-20">{session.data?.user.name}</span></DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{session.data.user.email}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => signOut()}>Log Out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => signOut()} className="text-center justify-center">Log Out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>}
       </div>
