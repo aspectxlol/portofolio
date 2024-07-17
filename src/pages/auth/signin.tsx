@@ -1,6 +1,9 @@
 import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import type { SVGProps } from "react"
+import { getServerSession } from "next-auth"
+import type { GetServerSidePropsContext } from "next"
+import { authOptions } from "@/server/auth"
 
 export default function SignIn() {
   return (
@@ -21,6 +24,20 @@ export default function SignIn() {
       </div>
     </main>
   )
+}
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions)
+  if (session) return {
+    redirect: {
+      destination: '/',
+      permanent: false
+    }
+  }
+
+  return {
+    props: {}
+  }
 }
 
 function IconSVG({ ref, ...svgProps }: SVGProps<SVGElement>) {
