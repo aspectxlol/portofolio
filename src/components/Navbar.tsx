@@ -11,12 +11,12 @@ export default function Navbar() {
       <div>
         <IconSVG className={`${NavbarStyles['nav-icons']}`}/>
       </div>
-      <div className="flex justify-between gap-8">
+      <div className="hidden justify-between gap-8 md:flex">
         <Link href={"#"} className={`${NavbarStyles["nav-links"]}`}>Blog</Link>
         <Link href={"#"} className={`${NavbarStyles["nav-links"]}`}>Games</Link>
         <Link href={"#"} className={`${NavbarStyles["nav-links"]}`}>Docs</Link>
       </div>
-      <div>
+      <div className="hidden md:flex">
         {!session.data && <button className="p-2 px-4 rounded-lg hover:bg-blue-300 hover:bg-opacity-20" onClick={() => signIn()}>Log In</button>}
         {session.data && <DropdownMenu>
           <DropdownMenuTrigger><span className="p-2 px-4 rounded-lg hover:bg-blue-300 hover:bg-opacity-20">{session.data?.user.name}</span></DropdownMenuTrigger>
@@ -26,6 +26,27 @@ export default function Navbar() {
             <DropdownMenuItem onSelect={() => signOut()} className="text-center justify-center">Log Out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>}
+      </div>
+      <div className="flex md:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger><HamburgerIcon /></DropdownMenuTrigger>
+            {session.data && <DropdownMenuContent>
+              <DropdownMenuLabel>{session.data.user.name}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Blogs</DropdownMenuItem>
+              <DropdownMenuItem>Games</DropdownMenuItem>
+              <DropdownMenuItem>Docs</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={() => signOut()}>Log Out</DropdownMenuItem>
+            </DropdownMenuContent>}
+            {!session.data && <DropdownMenuContent>
+              <DropdownMenuItem onSelect={() => signIn()}>Log In</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Blogs</DropdownMenuItem>
+              <DropdownMenuItem>Games</DropdownMenuItem>
+              <DropdownMenuItem>Docs</DropdownMenuItem>
+            </DropdownMenuContent>}
+          </DropdownMenu>
       </div>
     </nav>
   )
@@ -59,6 +80,14 @@ function IconSVG({ ref, ...svgProps }: SVGProps<SVGElement>) {
       <stop offset="1" stopColor="#007499"/>
       </linearGradient>
       </defs>
+    </svg>
+  )
+}
+
+function HamburgerIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
+      <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
     </svg>
   )
 }
