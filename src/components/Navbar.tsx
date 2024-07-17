@@ -16,7 +16,7 @@ export default function Navbar() {
         <Link href={"#"} className={`${NavbarStyles["nav-links"]}`}>Games</Link>
         <Link href={"#"} className={`${NavbarStyles["nav-links"]}`}>Docs</Link>
       </div>
-      <div className="hidden md:flex">
+      <div className="hidden sm:flex">
         {!session.data && <button className="p-2 px-4 rounded-lg hover:bg-blue-300 hover:bg-opacity-20" onClick={() => signIn()}>Log In</button>}
         {session.data && <DropdownMenu>
           <DropdownMenuTrigger><span className="p-2 px-4 rounded-lg hover:bg-blue-300 hover:bg-opacity-20">{session.data?.user.name}</span></DropdownMenuTrigger>
@@ -27,7 +27,7 @@ export default function Navbar() {
           </DropdownMenuContent>
         </DropdownMenu>}
       </div>
-      <div className="flex md:hidden">
+      <div className="flex sm:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger><HamburgerIcon /></DropdownMenuTrigger>
             {session.data && <DropdownMenuContent>
