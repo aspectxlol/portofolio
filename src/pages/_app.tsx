@@ -45,7 +45,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 export default api.withTRPC(MyApp);
 
 type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] }
-type CustomText = { text: string; bold?: true, italic?: true, underline?: true }
+type CustomText = { text: string; bold?: true, italic?: true, underline?: true, strikeThrough?: true }
 
 
 declare module 'slate' {

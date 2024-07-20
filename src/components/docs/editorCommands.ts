@@ -1,4 +1,5 @@
 import { type BaseEditor, Editor, Element, Transforms } from "slate"
+import type { HistoryEditor } from "slate-history"
 import { type ReactEditor } from "slate-react"
 
 function isBoldMarkActive(editor: BaseEditor & ReactEditor) {
@@ -16,12 +17,29 @@ function isUnderlineMarkActive(editor: BaseEditor & ReactEditor) {
   return marks ? marks.underline === true : false
 }
 
+function isStrikeThroughMarkActive(editor: BaseEditor & ReactEditor) {
+  const marks = Editor.marks(editor)
+  return marks ? marks.strikeThrough === true : false
+}
+
 function isCodeBlockActive(editor: BaseEditor & ReactEditor) {
   const [match] = Editor.nodes(editor, {
     match: n => Element.isElement(n) && n.type === 'code',
   })
 
   return !!match
+}
+
+
+
+
+
+function undo(editor: HistoryEditor) {
+  editor.undo()
+}
+
+function redo(editor: HistoryEditor) {
+  editor.redo()
 }
 
 function toggleBoldMark(editor: BaseEditor & ReactEditor) {
@@ -35,24 +53,29 @@ function toggleBoldMark(editor: BaseEditor & ReactEditor) {
 
 function toggleItalicMark(editor: BaseEditor & ReactEditor) {
   const isActive = isItalicMarkActive(editor)
-  console.log(isActive)
   if (isActive) {
     Editor.removeMark(editor, 'italic')
   } else {
     Editor.addMark(editor, 'italic', true)
   }
-  console.log(isActive)
 }
 
 function toggleUnderlineMark(editor: BaseEditor & ReactEditor) {
   const isActive = isUnderlineMarkActive(editor)
-  console.log(isActive)
   if (isActive) {
     Editor.removeMark(editor, 'underline')
   } else {
     Editor.addMark(editor, 'underline', true)
   }
-  console.log(isActive)
+}
+
+function toggleStrikeThrough(editor: BaseEditor & ReactEditor) {
+  const isActive = isStrikeThroughMarkActive(editor)
+  if (isActive) {
+    Editor.removeMark(editor, 'strikeThrough')
+  } else {
+    Editor.addMark(editor, 'strikeThrough', true)
+  }
 }
 
 function toggleCodeBlock(editor: BaseEditor & ReactEditor) {
@@ -67,6 +90,15 @@ function toggleCodeBlock(editor: BaseEditor & ReactEditor) {
 
 
 export {
+  isBoldMarkActive,
+  isItalicMarkActive,
+  isUnderlineMarkActive,
+  isStrikeThroughMarkActive,
+
+  undo,
+  redo,
+
+  toggleStrikeThrough,
   toggleBoldMark,
   toggleItalicMark,
   toggleUnderlineMark,
