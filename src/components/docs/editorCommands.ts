@@ -44,6 +44,7 @@ function redo(editor: HistoryEditor) {
 
 function toggleBoldMark(editor: BaseEditor & ReactEditor) {
   const isActive = isBoldMarkActive(editor)
+  console.log(Editor.marks(editor))
   if (isActive) {
     Editor.removeMark(editor, 'bold')
   } else {
