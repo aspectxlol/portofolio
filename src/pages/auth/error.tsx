@@ -17,12 +17,3 @@ export default function Error() {
     </main>
   )
 }
-
-/**
- * <a href="mailto:name1@rapidtables.com?
- * cc=name2@rapidtables.com&
- * bcc=name3@rapidtables.com&
- * subject=The%20subject%20of%20the%20email
- * &body=The%20body%20of%20the%20email">
-Send mail with cc, bcc, subject and body</a>
- */
