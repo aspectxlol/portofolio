@@ -1,20 +1,13 @@
 import React, { useCallback, useState } from 'react'
-import { createEditor, Editor, Transforms, Element } from 'slate'
-import { Slate, Editable, withReact, type RenderElementProps, type RenderLeafProps } from 'slate-react'
-
-const initialValue: Element[] = [
-  {
-    type: 'paragraph',
-    children: [{ text: 'A line of text in a paragraph.' }],
-  },
-  {
-    type: 'code',
-    children: [{ text: 'console.log(\'Hello World\')' }]
-  }
-]
+import { createEditor } from 'slate'
+import { Slate, Editable, withReact, type RenderElementProps, type RenderLeafProps, useSlate } from 'slate-react'
+import { Button } from '../ui/button'
+import { toggleCodeBlock, toggleBoldMark, toggleItalicMark, toggleUnderlineMark } from './editorCommands'
+import { initialValue } from '@/constants'
+import { HistoryEditor, withHistory } from 'slate-history'
 
 export default function DocsEditor() {
-    const [editor] = useState(() => withReact(createEditor()))
+    const [editor] = useState(() => withReact(withHistory(createEditor())))
 
     const renderElement = useCallback((props: RenderElementProps) => {
       switch (props.element.type) {
@@ -36,27 +29,52 @@ export default function DocsEditor() {
       initialValue={initialValue}
       
     >
+      <Toolbar />
       <Editable
         renderElement={props => renderElement(props)}
         renderLeaf={props => renderLeaf(props)}
         onKeyDown={event => {
-          if (event.key === '&') {
-            event.preventDefault()
-            editor.insertText('and ')
+          if (!event.ctrlKey) {
+            return
           }
-          if (event.key === '`' && event.ctrlKey) {
-            const [match] = Editor.nodes(editor, {
-              match: n => Element.isElement(n) && n.type === 'code',
-            })
-          
-            Transforms.setNodes(
-              editor,
-              { type: match ? 'paragraph' : 'code' },
-              { match: n => Element.isElement(n) && Editor.isBlock(editor, n) }
-            )
-          }
-          if (event.key === 'b' && event.ctrlKey) {
-            Editor.addMark(editor, 'bold', true)
+
+          // Replace the `onKeyDown` logic with our new commands.
+          switch (event.key) {
+            case '`': {
+              event.preventDefault()
+              toggleCodeBlock(editor)
+              break
+            }
+
+            case 'b': {
+              event.preventDefault()
+              toggleBoldMark(editor)
+              break
+            }
+              
+            case 'i': {
+              event.preventDefault()
+              toggleItalicMark(editor)
+              break
+            }
+              
+            case 'u': {
+              event.preventDefault()
+              toggleUnderlineMark(editor)
+              break
+            }
+              
+            case 'z': {
+              event.preventDefault()
+              HistoryEditor.undo(editor)
+              break
+            }
+              
+            case 'y': {
+              event.preventDefault()
+              HistoryEditor.redo(editor)
+              break
+            }
           }
         }}
       />
@@ -64,10 +82,7 @@ export default function DocsEditor() {
   )
 }
 
-const CodeElement = (props: {
-  attributes: React.JSX.IntrinsicAttributes & React.ClassAttributes<HTMLPreElement> & React.HTMLAttributes<HTMLPreElement>;
-  children: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined
-}) => {
+const CodeElement = (props: RenderElementProps) => {
   return (
     <pre {...props.attributes}>
       <code>{props.children}</code>
@@ -75,7 +90,7 @@ const CodeElement = (props: {
   )
 }
 
-const DefaultElement = (props: { attributes: React.JSX.IntrinsicAttributes & React.ClassAttributes<HTMLParagraphElement> & React.HTMLAttributes<HTMLParagraphElement>; children: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<unknown>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined }) => {
+const DefaultElement = (props: RenderElementProps) => {
   return <p {...props.attributes}>{props.children}</p>
 }
 
@@ -83,9 +98,27 @@ const Leaf = (props: RenderLeafProps) => {
   return (
     <span
       {...props.attributes}
-      style={{ fontWeight: props.leaf.bold ? 'bold' : 'normal' }}
+      style={
+        {
+          fontWeight: props.leaf.bold ? 'bold' : 'normal', 
+          fontStyle: props.leaf.italic ? 'italic' : 'normal',
+          textDecoration: props.leaf.underline ? 'underline' : ''
+        }
+      }
     >
       {props.children}
     </span>
+  )
+}
+
+const Toolbar = () => {
+  const editor = useSlate()
+
+  return (
+    <div>
+      <Button onClick={() => toggleBoldMark(editor)}>B</Button>
+      <Button onClick={() => toggleItalicMark(editor)}>I</Button>
+      <Button onClick={() => toggleUnderlineMark(editor)}>U</Button>
+    </div>
   )
 }

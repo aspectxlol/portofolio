@@ -2,27 +2,14 @@ import { GeistSans } from "geist/font/sans";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
+import { type BaseEditor } from "slate";
+import { type ReactEditor } from "slate-react";
+import Head from "next/head";
 
 import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
-import Head from "next/head";
 import { ThemeProvider } from "@/components/ThemeProvider";
-
-import type { BaseEditor } from 'slate'
-import type { ReactEditor } from 'slate-react'
-
-type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] }
-type CustomText = { text: string; bold?: true }
-
-
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor 
-    Element: CustomElement
-    Text: CustomText
-  }
-}
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -56,3 +43,22 @@ const MyApp: AppType<{ session: Session | null }> = ({
 };
 
 export default api.withTRPC(MyApp);
+
+type CustomElement = { type: 'paragraph' | 'code'; children: CustomText[] }
+type CustomText = { text: string; bold?: true, italic?: true, underline?: true }
+
+
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor 
+    Element: CustomElement
+    Text: CustomText
+  }
+}
+
+export interface HistoryEditor extends BaseEditor {
+  history: History
+  undo: () => void
+  redo: () => void
+  writeHistory: (stack: 'undos' | 'redos', batch: unknown) => void
+}
