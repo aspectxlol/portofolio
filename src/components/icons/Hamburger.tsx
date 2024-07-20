@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import type { SVGProps } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function HamburgerIcon({ ref, ...svgProps }: SVGProps<SVGElement>) {
