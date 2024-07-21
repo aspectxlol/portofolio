@@ -7,8 +7,12 @@ import { HistoryEditor, withHistory } from 'slate-history'
 import Link from 'next/link'
 import IconSVG from '../icons/logo'
 import { Input } from '../ui/input'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
-import { Bold, DownloadFile, Italic, NewFile, OpenFile, PrintFile, Redo, ShareFile, StrikeThrough, Underline, Undo } from '../icons/Docs'
+import { MdFileCopy, MdFileDownload, MdFileOpen, MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdLocalPrintshop, MdOutlineRedo, MdOutlineShare, MdOutlineStrikethroughS, MdOutlineTextFormat, MdOutlineUndo } from "react-icons/md";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import EditorCSS from './Editor.module.css'
+import FontInput from '../ui/FontInput'
+import { TextColorIcon } from '../icons/Docs'
+
 
 export default function DocsEditor() {
     const [editor] = useState(() => withReact(withHistory(createEditor())))
@@ -115,7 +119,7 @@ const Leaf = (props: RenderLeafProps) => {
 
 const Toolbar = ({ editor }: { editor: HistoryEditor & BaseEditor & ReactEditor }) => {
   return (
-    <div className='p-5 sticky top-0 w-full border-b-2 print:hidden'>
+    <div className='p-5 sticky top-0 w-full border-b-2 print:hidden transition-all'>
       <div className='flex flex-row'>
         <Link href={"/docs"} className='m-3'><IconSVG /></Link>
         <div className='flex flex-col'>
@@ -124,11 +128,11 @@ const Toolbar = ({ editor }: { editor: HistoryEditor & BaseEditor & ReactEditor 
             <DropdownMenu>
               <DropdownMenuTrigger className='outline-none'>File</DropdownMenuTrigger>
               <DropdownMenuContent className='bg-gray-600 p-2 rounded-lg'>
-                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><NewFile className='mr-2'/>New</DropdownMenuItem>
-                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><OpenFile className='mr-2'/>Open</DropdownMenuItem>
+                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><MdFileCopy className='mr-2'/>New</DropdownMenuItem>
+                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><MdFileOpen className='mr-2'/>Open</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><ShareFile className='mr-2'/>Share</DropdownMenuItem>
-                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><DownloadFile className='mr-2'/>Download</DropdownMenuItem>
+                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><MdOutlineShare  className='mr-2'/>Share</DropdownMenuItem>
+                <DropdownMenuItem className='flex flex-row justify-start items-center outline-none text-xl cursor-pointer'><MdFileDownload  className='mr-2'/>Download</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
@@ -153,18 +157,22 @@ const Toolbar = ({ editor }: { editor: HistoryEditor & BaseEditor & ReactEditor 
         </div>
       </div>
       <div className='flex flex-row items-center'>
-        <div className='flex flex-row items-center'>
-          <button className='hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2 ' onClick={() => window.print()}><PrintFile className=''/></button>
+        <div className={`${EditorCSS.cmdContainer}`}>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => window.print()}><MdLocalPrintshop className='w-6 h-6'/></button>
         </div>
-        <div className='flex flex-row items-center'>
-          <button className='hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2 ' onClick={() => undo(editor)}><Undo className=''/></button>
-          <button className='hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2 ' onClick={() => redo(editor)}><Redo className=''/></button>
+        <div className={`${EditorCSS.cmdContainer}`}>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => undo(editor)}><MdOutlineUndo  className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => redo(editor)}><MdOutlineRedo  className='w-6 h-6'/></button>
         </div>
-        <div className='flex flex-row justify-between'>
-          <button className={`hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2`} onClick={() => toggleBoldMark(editor)}><Bold /></button>
-          <button className={`hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2`} onClick={() => toggleItalicMark(editor)}><Italic /></button>
-          <button className={`hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2`} onClick={() => toggleUnderlineMark(editor)}><Underline /></button>
-          <button className={`hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2`} onClick={() => toggleStrikeThrough(editor)}><StrikeThrough /></button>  
+        <div className={`${EditorCSS.cmdContainer}`}>
+          <FontInput />
+        </div>
+        <div className={`${EditorCSS.cmdContainer}`}>
+          <button className={``} onClick={() => toggleBoldMark(editor)}><MdFormatBold className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleItalicMark(editor)}><MdFormatItalic className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleUnderlineMark(editor)}><MdFormatUnderlined className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleStrikeThrough(editor)}><MdOutlineStrikethroughS className='w-6 h-6'/></button>  
+          <button className={`${EditorCSS.cmdButton} flex flex-col`} onClick={() => toggleStrikeThrough(editor)}><TextColorIcon className='w-6 h-6' rectangleColor='blue'/></button>  
         </div>
       </div>
     </div>

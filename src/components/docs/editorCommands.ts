@@ -63,15 +63,17 @@ function toggleItalicMark(editor: BaseEditor & ReactEditor) {
 
 function toggleUnderlineMark(editor: BaseEditor & ReactEditor) {
   const isActive = isUnderlineMarkActive(editor)
+  Editor.removeMark(editor, 'strikeThrough')
   if (isActive) {
     Editor.removeMark(editor, 'underline')
   } else {
     Editor.addMark(editor, 'underline', true)
   }
-}
+  }
 
 function toggleStrikeThrough(editor: BaseEditor & ReactEditor) {
   const isActive = isStrikeThroughMarkActive(editor)
+  Editor.removeMark(editor, 'underline')
   if (isActive) {
     Editor.removeMark(editor, 'strikeThrough')
   } else {

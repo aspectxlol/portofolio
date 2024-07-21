@@ -1,0 +1,7 @@
+.cmdContainer {
+  @apply flex flex-row items-center border-r-2 px-2;
+}
+
+.cmdButton {
+  @apply hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2;
+}
