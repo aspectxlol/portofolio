@@ -7,28 +7,27 @@ import { HistoryEditor, withHistory } from 'slate-history'
 import Link from 'next/link'
 import IconSVG from '../icons/logo'
 import { Input } from '../ui/input'
-import { MdFileCopy, MdFileDownload, MdFileOpen, MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdLocalPrintshop, MdOutlineRedo, MdOutlineShare, MdOutlineStrikethroughS, MdOutlineTextFormat, MdOutlineUndo } from "react-icons/md";
+import { MdFileCopy, MdFileDownload, MdFileOpen, MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdLocalPrintshop, MdOutlineRedo, MdOutlineShare, MdOutlineStrikethroughS, MdOutlineUndo } from "react-icons/md";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu'
 import EditorCSS from './Editor.module.css'
-import FontInput from '../ui/FontInput'
-import { TextColorIcon } from '../icons/Docs'
-
+import FontInput from '../ui/FontSizeInput'
+import FontColorInput from '../ui/FontColorInput'
 
 export default function DocsEditor() {
-    const [editor] = useState(() => withReact(withHistory(createEditor())))
+  const [editor] = useState(() => withReact(withHistory(createEditor())))
 
-    const renderElement = useCallback((props: RenderElementProps) => {
-      switch (props.element.type) {
-        case "code":
-          return <CodeElement {...props} />
-        default:
-          return <DefaultElement {...props} />
-      }
-    }, [])
-  
-    const renderLeaf = useCallback((props: RenderLeafProps) => {
-      return <Leaf {...props} />
-    }, [])
+  const renderElement = useCallback((props: RenderElementProps) => {
+    switch (props.element.type) {
+      case "code":
+        return <CodeElement {...props} />
+      default:
+        return <DefaultElement {...props} />
+    }
+  }, [])
+
+  const renderLeaf = useCallback((props: RenderLeafProps) => {
+    return <Leaf {...props} />
+  }, [])
 
   
   // const pages = [1, 2, 3]
@@ -87,7 +86,7 @@ export default function DocsEditor() {
               }
             }
           }}
-          className='max-w-[8.27in] max-h-[11.69in] min-w-[8.3in] min-h-[13in] p-[1in] bg-white focus:outline-none print:outline-none border-2 text-black drop-shadow-lg my-4 print:m-0 overflow-x-auto'
+          className='max-w-[8.27in] max-h-[11.69in] min-w-[8.3in] min-h-[13in] p-[1in] bg-white focus:outline-none print:outline-none border-2 text-black drop-shadow-lg my-4 print:m-0 overflow-x-auto rounded-sm'
         />
       </div>
     </Slate>
@@ -118,6 +117,7 @@ const Leaf = (props: RenderLeafProps) => {
 }
 
 const Toolbar = ({ editor }: { editor: HistoryEditor & BaseEditor & ReactEditor }) => {
+  const [FontColor, setFontColor] = useState('#000000')
   return (
     <div className='p-5 sticky top-0 w-full border-b-2 print:hidden transition-all'>
       <div className='flex flex-row'>
@@ -171,8 +171,12 @@ const Toolbar = ({ editor }: { editor: HistoryEditor & BaseEditor & ReactEditor 
           <button className={``} onClick={() => toggleBoldMark(editor)}><MdFormatBold className='w-6 h-6'/></button>
           <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleItalicMark(editor)}><MdFormatItalic className='w-6 h-6'/></button>
           <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleUnderlineMark(editor)}><MdFormatUnderlined className='w-6 h-6'/></button>
-          <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleStrikeThrough(editor)}><MdOutlineStrikethroughS className='w-6 h-6'/></button>  
-          <button className={`${EditorCSS.cmdButton} flex flex-col`} onClick={() => toggleStrikeThrough(editor)}><TextColorIcon className='w-6 h-6' rectangleColor='blue'/></button>  
+          <button className={`${EditorCSS.cmdButton}`} onClick={() => toggleStrikeThrough(editor)}><MdOutlineStrikethroughS className='w-6 h-6' /></button>
+          <FontColorInput FontColor={FontColor} setFontColor={(color) => setFontColor(color)} FontColorCSS={EditorCSS.cmdButton!}/>
+        
+        </div>
+        <div>
+          <button></button>
         </div>
       </div>
     </div>
