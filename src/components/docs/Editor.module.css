@@ -3,5 +3,5 @@
 }
 
 .cmdButton {
-  @apply hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2;
+  @apply hover:bg-slate-50 hover:bg-opacity-40 rounded-lg p-2 mx-1;
 }
