@@ -89,7 +89,23 @@ function toggleCodeBlock(editor: BaseEditor & ReactEditor) {
   )
 }
 
+function currentActiveColor(editor: BaseEditor & ReactEditor) {
+  return Editor.marks(editor)?.textColor
+}
 
+function currentFontSize(editor: BaseEditor & ReactEditor) {
+  return Editor.marks(editor)?.fontSize
+}
+
+function setTextFontColor(editor: BaseEditor & ReactEditor, color: string) {
+  Editor.removeMark(editor, 'textColor')
+  Editor.addMark(editor, 'textColor', color)
+}
+
+function setTextFontSize(editor: BaseEditor & ReactEditor, fontSize: number) {
+  Editor.removeMark(editor, 'fontSize')
+  Editor.addMark(editor, 'fontSize', fontSize)
+}
 
 export {
   isBoldMarkActive,
@@ -104,5 +120,11 @@ export {
   toggleBoldMark,
   toggleItalicMark,
   toggleUnderlineMark,
-  toggleCodeBlock
+  toggleCodeBlock,
+
+  currentActiveColor,
+  currentFontSize,
+  
+  setTextFontColor,
+  setTextFontSize
 }

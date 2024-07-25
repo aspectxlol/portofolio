@@ -80,12 +80,7 @@ html, body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  @apply transition-all rounded-lg bg-slate-500 hover:bg-slate-400
 }
 
 input::-webkit-outer-spin-button,

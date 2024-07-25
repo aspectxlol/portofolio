@@ -1,14 +1,12 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
 import { MdAdd, MdOutlineRemove } from "react-icons/md"
 
-export default function FontInput() {
-  const [ fontSize, setFontSize ] = useState(12)
+export default function FontInput({ FontSize, setFontSize }: { FontSize: number, setFontSize: (FontSize: number) => void }) {
 
   return (
     <div className="flex flex-row justify-between items-center transition-all">
-      <button className="flex flex-col justify-center items-center w-8 h-8" onClick={() => setFontSize(fontSize + 1)}>
+      <button className="flex flex-col justify-center items-center w-8 h-8" onClick={() => setFontSize(FontSize + 1)}>
         <MdAdd />
       </button>
       <DropdownMenu>
@@ -17,8 +15,8 @@ export default function FontInput() {
           <Input 
             type="number" 
             id="font-size" 
-            value={fontSize} 
-            className="flex-1 w-10 h-10 text-center font-bold" 
+            value={FontSize} 
+            className="flex-1 w-14 h-10 text-center font-bold" 
             onChange={e => setFontSize(parseInt(e.target.value))}
           />
         </div>
@@ -34,7 +32,7 @@ export default function FontInput() {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-      <button className="flex flex-col justify-center items-center w-8 h-8 " onClick={() => setFontSize(fontSize - 1)}>
+      <button className="flex flex-col justify-center items-center w-8 h-8 " onClick={() => setFontSize(FontSize - 1)}>
         <MdOutlineRemove />
       </button>
     </div>

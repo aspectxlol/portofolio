@@ -1,48 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { createEditor, Editor } from 'slate'
 import { Slate, Editable, withReact, type RenderElementProps, type RenderLeafProps } from 'slate-react'
-import { toggleCodeBlock, toggleBoldMark, toggleItalicMark, toggleUnderlineMark } from './editorCommands'
 import { initialValue } from '@/constants'
-import { HistoryEditor, withHistory } from 'slate-history'
+import { withHistory } from 'slate-history'
 import Toolbar from './Toolbar'
-import { Underline } from 'lucide-react'
+import { currentActiveColor, currentFontSize } from './editorCommands'
 
 export default function DocsEditor() {
   const [editor] = useState(() => withReact(withHistory(createEditor())))
+  // const [editorValues, setEditorValues] = useState<Element[][]>([1].map(() => initialValue));
+  // const [editors, setEditors] = useState(() => editorValues.map(() => withReact(withHistory(createEditor()))))
+  // const [Index, setActiveIndex] = useState(0)
+
   const [isBoldStatus, setBoldStatus] = useState(false)
   const [isItalicStatus, setItalicStatus] = useState(false)
   const [isUnderlineStatus, setUnderlineStatus] = useState(false)
   const [isStrikeThroughStatus, setStrikeThroughStatus] = useState(false)
-
-
-  const { onChange } = editor
-  editor.onChange = () => {
-    if (editor.operations.every(op => op.type === 'set_selection')) {
-      const marks = Editor.marks(editor)
-      if (marks?.bold) {setBoldStatus(true)} else { setBoldStatus(false) }
-      if (marks?.italic) {setItalicStatus(true)} else { setItalicStatus(false) }
-      if (marks?.underline) {setUnderlineStatus(true)} else { setUnderlineStatus(false) }
-      if (marks?.strikeThrough) {setStrikeThroughStatus(true)} else { setStrikeThroughStatus(false) }
-    }
-
-    return onChange()
-  }
-
-  // useEffect(() => {
-  //   console.log("Bold", isBoldStatus, isBoldStatus && "Y")
-  // }, [isBoldStatus])
-
-  // useEffect(() => {
-  //   console.log("Underline", isUnderlineStatus, isUnderlineStatus && "Y")
-  // }, [isUnderlineStatus])
-
-  // useEffect(() => {
-  //   console.log("Italic", isItalicStatus, isItalicStatus && "Y")
-  // }, [isItalicStatus])
-  
-  // useEffect(() => {
-  //   console.log("StrikeThrough", isStrikeThroughStatus, isStrikeThroughStatus && "Y")
-  // }, [isStrikeThroughStatus])
+  const [FontColor, setFontColor] = useState('#000000')
+  const [FontSize, setFontSize] = useState(11)
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
@@ -56,6 +31,22 @@ export default function DocsEditor() {
         return <p {...props.attributes}>{props.children}</p>
     }
   }, [])
+  
+  const { onChange } = editor
+
+  editor.onChange = () => {
+    if (editor.operations.every(op => op.type === 'set_selection')) {
+      const marks = Editor.marks(editor)
+      if (marks?.bold) {setBoldStatus(true)} else { setBoldStatus(false) }
+      if (marks?.italic) {setItalicStatus(true)} else { setItalicStatus(false) }
+      if (marks?.underline) {setUnderlineStatus(true)} else { setUnderlineStatus(false) }
+      if (marks?.strikeThrough) {setStrikeThroughStatus(true)} else { setStrikeThroughStatus(false) }
+
+      setFontColor(currentActiveColor(editor)!)
+      setFontSize(currentFontSize(editor)!)
+    }
+    return onChange()
+  }
 
   const renderLeaf = useCallback((props: RenderLeafProps) => {
     return (
@@ -67,6 +58,10 @@ export default function DocsEditor() {
           ${props.leaf.underline ? 'underline' : ''} 
           ${props.leaf.strikeThrough ? 'line-through' : ''}
         `}
+        style={{
+          color: `${props.leaf.textColor}`,
+          fontSize: `${props.leaf.fontSize}pt`
+        }}
       >
         {props.children}
       </span>
@@ -75,6 +70,7 @@ export default function DocsEditor() {
   
   return (
     <Slate
+      // editor={withReact(withHistory(createEditor()))}
       editor={editor}
       initialValue={initialValue}
     >
@@ -92,56 +88,23 @@ export default function DocsEditor() {
           underline: setUnderlineStatus,
           strikeThrough: setStrikeThroughStatus
         }}
+        FontColor={FontColor}
+        FontSize={FontSize}
+        setFontColor={setFontColor}
+        setFontSize={setFontSize}
       />
       <div className='w-full h-screen flex flex-col items-center align-top overflow-y-scroll print:h-full'>
         <Editable
-          renderElement={props => renderElement(props)}
-          renderLeaf={props => renderLeaf(props)}
-          onKeyDown={event => {
-            if (!event.ctrlKey) {
-              return
-            }
-
-            // Replace the `onKeyDown` logic with our new commands.
-            switch (event.key) {
-              case '`': {
-                event.preventDefault()
-                toggleCodeBlock(editor)
-                break
-              }
-
-              case 'b': {
-                event.preventDefault()
-                toggleBoldMark(editor)
-                break
-              }
-                
-              case 'i': {
-                event.preventDefault()
-                toggleItalicMark(editor)
-                break
-              }
-                
-              case 'u': {
-                event.preventDefault()
-                toggleUnderlineMark(editor)
-                break
-              }
-                
-              case 'z': {
-                event.preventDefault()
-                HistoryEditor.undo(editor)
-                break
-              }
-                
-              case 'y': {
-                event.preventDefault()
-                HistoryEditor.redo(editor)
-                break
-              }
-            }
-          }}
-          className='max-w-[8.27in] max-h-[11.69in] min-w-[8.3in] min-h-[13in] p-[1in] bg-white focus:outline-none print:outline-none border-2 text-black drop-shadow-lg my-4 print:m-0 overflow-x-auto rounded-sm'
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          className='
+            max-w-[8.27in] max-h-[11.69in] 
+            min-w-[8.3in] min-h-[13in] p-[1in] 
+            bg-white text-black focus:outline-none 
+            border-2 drop-shadow-lg my-4 
+            print:m-0 print:outline-none
+            overflow-x-auto overflow-y-hidden
+            rounded-sm'
         />
       </div>
     </Slate>

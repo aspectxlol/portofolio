@@ -1,11 +1,11 @@
-import { useState } from "react"
+import { useEffect } from "react"
 import { MdFileCopy, MdFileOpen, MdOutlineShare, MdFileDownload, MdLocalPrintshop, MdOutlineUndo, MdOutlineRedo, MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdOutlineStrikethroughS } from "react-icons/md"
 import { type BaseEditor } from "slate"
 import { type HistoryEditor } from "slate-history"
 import { type ReactEditor } from "slate-react"
 import FontColorInput from "../ui/FontColorInput"
 import FontInput from "../ui/FontSizeInput"
-import { undo, redo, toggleBoldMark, toggleItalicMark, toggleUnderlineMark, toggleStrikeThrough } from "./editorCommands"
+import { undo, redo, toggleBoldMark, toggleItalicMark, toggleUnderlineMark, toggleStrikeThrough, setTextFontColor, setTextFontSize } from "./editorCommands"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Input } from "../ui/input"
 import EditorCSS from './Editor.module.css'
@@ -13,7 +13,7 @@ import IconSVG from "../icons/logo"
 import Link from "next/link"
 
 
-export default function Toolbar({ editor, status, setStatus }: {
+export default function Toolbar({ editor, status, setStatus, FontColor, setFontColor, FontSize, setFontSize }: {
   editor: HistoryEditor & BaseEditor & ReactEditor,
   status: {
     bold: boolean,
@@ -26,9 +26,21 @@ export default function Toolbar({ editor, status, setStatus }: {
     italic: (italic: boolean) => void,
     underline: (underline: boolean) => void,
     strikeThrough: (strikeThrough: boolean) => void
-  }
+  },
+  FontColor: string,
+  FontSize: number,
+  setFontColor: (FontColor: string) => void,
+  setFontSize: (FontSize: number) => void
 }) {
-  const [FontColor, setFontColor] = useState('#000000')
+
+  useEffect(() => {
+    setTextFontColor(editor, FontColor)
+  }, [FontColor, editor])
+
+  useEffect(() => {
+    setTextFontSize(editor, FontSize)
+  }, [FontSize, editor])
+
   return (
     <div className='p-5 sticky top-0 w-full border-b-2 print:hidden transition-all'>
       <div className='flex flex-row'>
@@ -76,7 +88,10 @@ export default function Toolbar({ editor, status, setStatus }: {
           <button className={`${EditorCSS.cmdButton}`} onClick={() => redo(editor)}><MdOutlineRedo  className='w-6 h-6'/></button>
         </div>
         <div className={`${EditorCSS.cmdContainer}`}>
-          <FontInput />
+          <FontInput
+            FontSize={FontSize}
+            setFontSize={setFontSize}
+          />
         </div>
         <div className={`${EditorCSS.cmdContainer}`}>
           <button className={`${EditorCSS.cmdButton} ${status.bold ? "bg-blue-400 bg-opacity-40" : ""}`} onClick={() => { toggleBoldMark(editor);  setStatus.bold(!status.bold)}}><MdFormatBold className='w-6 h-6'/></button>
