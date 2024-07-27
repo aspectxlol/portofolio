@@ -94,10 +94,10 @@ export default function Toolbar({ editor, status, setStatus, FontColor, setFontC
           />
         </div>
         <div className={`${EditorCSS.cmdContainer}`}>
-          <button className={`${EditorCSS.cmdButton} ${status.bold ? "bg-blue-400 bg-opacity-40" : ""}`} onClick={() => { toggleBoldMark(editor);  setStatus.bold(!status.bold)}}><MdFormatBold className='w-6 h-6'/></button>
-          <button className={`${EditorCSS.cmdButton} ${status.italic ? "bg-blue-400 bg-opacity-40" : ""}`} onClick={() => { toggleItalicMark(editor);  setStatus.italic(!status.bold)}}><MdFormatItalic className='w-6 h-6'/></button>
-          <button className={`${EditorCSS.cmdButton} ${status.underline ? "bg-blue-400 bg-opacity-40" : ""}`} onClick={() => { toggleUnderlineMark(editor); setStatus.underline(!status.underline)}}><MdFormatUnderlined className='w-6 h-6'/></button>
-          <button className={`${EditorCSS.cmdButton} ${status.strikeThrough ? "bg-blue-400 bg-opacity-40" : ""}`} onClick={() => { toggleStrikeThrough(editor);  setStatus.strikeThrough(!status.strikeThrough)}}><MdOutlineStrikethroughS className='w-6 h-6' /></button>
+          <button className={`${EditorCSS.cmdButton} ${status.bold ? "bg-blue-400 bg-opacity-40" : ""} transition-all`} onClick={() => { toggleBoldMark(editor);  setStatus.bold(!status.bold)}}><MdFormatBold className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton} ${status.italic ? "bg-blue-400 bg-opacity-40" : ""} transition-all`} onClick={() => { toggleItalicMark(editor);  setStatus.italic(!status.bold)}}><MdFormatItalic className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton} ${status.underline ? "bg-blue-400 bg-opacity-40" : ""} transition-all`} onClick={() => { toggleUnderlineMark(editor); setStatus.underline(!status.underline)}}><MdFormatUnderlined className='w-6 h-6'/></button>
+          <button className={`${EditorCSS.cmdButton} ${status.strikeThrough ? "bg-blue-400 bg-opacity-40" : ""} transition-all`} onClick={() => { toggleStrikeThrough(editor);  setStatus.strikeThrough(!status.strikeThrough)}}><MdOutlineStrikethroughS className='w-6 h-6' /></button>
           <FontColorInput FontColor={FontColor} setFontColor={(color) => setFontColor(color)} FontColorCSS={EditorCSS.cmdButton!}/>
         </div>
         <div>

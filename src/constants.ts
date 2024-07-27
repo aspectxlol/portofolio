@@ -1,9 +1,17 @@
 import type { Element } from "slate";
+import { TextAlignment } from "./pages/_app";
 
 export const initialValue: Element[] = [
   {
     type: 'paragraph',
-    children: [{ text: "Placeholder", textColor: '#000', fontSize: 11 }]
+    children: [
+      {
+      text: "Placeholder",
+      textColor: '#000',
+      fontSize: 11,
+      textAlignment: TextAlignment.Center
+      }
+    ]
   }
 ]
 

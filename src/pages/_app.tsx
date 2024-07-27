@@ -49,7 +49,7 @@ interface CustomText {
   text: string
   textColor: string
   fontSize: number
-  // textAlignment: TextAlignment
+  textAlignment: TextAlignment
 
   bold?: true
   italic?: true
@@ -57,12 +57,12 @@ interface CustomText {
   strikeThrough?: true
 }
 
-// enum TextAlignment {
-//   Start,
-//   Center,
-//   End,
-//   Justify
-// }
+export enum TextAlignment {
+  Start,
+  Center,
+  End,
+  Justify
+}
 
 declare module 'slate' {
   interface CustomTypes {
